@@ -8,7 +8,7 @@ import Card from './components/Card'
 import SeatChart from './components/SeatChart'
 
 // ABIs
-import TokenMaster from './abis/TokenMaster.json'
+import NFTix from './abis/NFTix.json'  // Updated to import the new contract ABI
 
 // Config
 import config from './config.json'
@@ -17,7 +17,7 @@ function App() {
   const [provider, setProvider] = useState(null)
   const [account, setAccount] = useState(null)
 
-  const [tokenMaster, setTokenMaster] = useState(null)
+  const [nftix, setNFTix] = useState(null)  // Renamed from tokenMaster to nftix
   const [occasions, setOccasions] = useState([])
 
   const [occasion, setOccasion] = useState({})
@@ -28,14 +28,14 @@ function App() {
     setProvider(provider)
 
     const network = await provider.getNetwork()
-    const tokenMaster = new ethers.Contract(config[network.chainId].TokenMaster.address, TokenMaster, provider)
-    setTokenMaster(tokenMaster)
+    const nftix = new ethers.Contract(config[network.chainId].NFTix.address, NFTix, provider)  // Updated to use NFTix
+    setNFTix(nftix)  // Renamed from tokenMaster to nftix
 
-    const totalOccasions = await tokenMaster.totalOccasions()
+    const totalOccasions = await nftix.totalOccasions()  // Renamed to nftix
     const occasions = []
 
     for (var i = 1; i <= totalOccasions; i++) {
-      const occasion = await tokenMaster.getOccasion(i)
+      const occasion = await nftix.getOccasion(i)  // Renamed to nftix
       occasions.push(occasion)
     }
 
@@ -67,7 +67,7 @@ function App() {
           <Card
             occasion={occasion}
             id={index + 1}
-            tokenMaster={tokenMaster}
+            nftix={nftix}  // Renamed from tokenMaster to nftix
             provider={provider}
             account={account}
             toggle={toggle}
@@ -81,7 +81,7 @@ function App() {
       {toggle && (
         <SeatChart
           occasion={occasion}
-          tokenMaster={tokenMaster}
+          nftix={nftix}  // Renamed from tokenMaster to nftix
           provider={provider}
           setToggle={setToggle}
         />
